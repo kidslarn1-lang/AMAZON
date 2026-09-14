@@ -151,6 +151,8 @@
       padding: 1.5rem;
       position: relative;
       transition: transform 0.2s ease;
+      display: flex;
+      flex-direction: column;
     }
 
     .tier-card:hover {
@@ -162,11 +164,19 @@
       box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
     }
 
+    .tier-image {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
     .tier-card .level-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
 
     .tier-card h4 {
@@ -185,6 +195,7 @@
       font-size: 0.875rem;
       color: var(--text-muted);
       margin-bottom: 1.5rem;
+      flex-grow: 1;
     }
 
     .tier-details li {
@@ -267,14 +278,16 @@
     <h2 class="section-title">Membership Tiers</h2>
     <div class="tiers-grid">
       
-      <!-- VIP 1 -->
+      <!-- VIP 1: Motorcycle -->
       <div class="tier-card active">
+        <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=500&q=80" alt="Motorcycle" class="tier-image">
         <div class="level-header">
           <h4>VIP Level 1</h4>
           <span class="badge">Current</span>
         </div>
         <div class="yield">1.5% Daily</div>
         <ul class="tier-details">
+          <li><strong>Reward Target:</strong> Motorcycle</li>
           <li><strong>Min Deposit:</strong> $10.00</li>
           <li><strong>Max Deposit:</strong> $99.00</li>
           <li><strong>Daily Tasks:</strong> 10 Confirmations</li>
@@ -282,13 +295,15 @@
         <button class="action-btn secondary" disabled>Active Level</button>
       </div>
 
-      <!-- VIP 2 -->
+      <!-- VIP 2: Fridge -->
       <div class="tier-card">
+        <img src="https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=500&q=80" alt="Fridge" class="tier-image">
         <div class="level-header">
           <h4>VIP Level 2</h4>
         </div>
         <div class="yield">2.5% Daily</div>
         <ul class="tier-details">
+          <li><strong>Reward Target:</strong> Refrigerator</li>
           <li><strong>Min Deposit:</strong> $100.00</li>
           <li><strong>Max Deposit:</strong> $499.00</li>
           <li><strong>Daily Tasks:</strong> 15 Confirmations</li>
@@ -296,13 +311,15 @@
         <button class="action-btn" onclick="upgradeTier('VIP 2', 100)">Unlock Level 2</button>
       </div>
 
-      <!-- VIP 3 -->
+      <!-- VIP 3: Car -->
       <div class="tier-card">
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=500&q=80" alt="Car" class="tier-image">
         <div class="level-header">
           <h4>VIP Level 3</h4>
         </div>
         <div class="yield">3.5% Daily</div>
         <ul class="tier-details">
+          <li><strong>Reward Target:</strong> Automobile</li>
           <li><strong>Min Deposit:</strong> $500.00</li>
           <li><strong>Max Deposit:</strong> $1,999.00</li>
           <li><strong>Daily Tasks:</strong> 20 Confirmations</li>
@@ -310,13 +327,15 @@
         <button class="action-btn" onclick="upgradeTier('VIP 3', 500)">Unlock Level 3</button>
       </div>
 
-      <!-- VIP 4 -->
+      <!-- VIP 4: House -->
       <div class="tier-card">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=500&q=80" alt="House" class="tier-image">
         <div class="level-header">
           <h4>VIP Level 4</h4>
         </div>
         <div class="yield">5.0% Daily</div>
         <ul class="tier-details">
+          <li><strong>Reward Target:</strong> Luxury House</li>
           <li><strong>Min Deposit:</strong> $2,000.00+</li>
           <li><strong>Max Deposit:</strong> Unlimited</li>
           <li><strong>Daily Tasks:</strong> 25 Confirmations</li>
@@ -346,7 +365,7 @@
     <p><strong>Platform Notice & Risk Warning:</strong> Yield rates are subject to user capital tier requirements and completion of mandatory daily validation tasks. Operating high-yield financial portals without proper regulatory registration carries compliance risks. Standard network transaction fees apply to all deposits and withdrawals.</p>
   </footer>
 
-  <!-- Basic Interactivity Demo Script -->
+  <!-- Interactivity Script -->
   <script>
     let currentTasks = 3;
     const maxTasks = 10;
@@ -357,7 +376,6 @@
         currentTasks++;
         currentEarnings += 0.25;
         
-        // Update UI
         document.getElementById('task-counter').innerText = `${currentTasks} / ${maxTasks}`;
         document.getElementById('daily-earnings').innerText = `$${currentEarnings.toFixed(2)}`;
         
