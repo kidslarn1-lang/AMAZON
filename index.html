@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Yield Network | Task & Staking Dashboard</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent-color: #f59e0b;
+      --accent-hover: #d97706;
+      --text-color: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --success-color: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      padding-bottom: 60px;
+    }
+
+    header {
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .badge {
+      background-color: var(--accent-color);
+      color: #000;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    /* Account Dashboard */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .dash-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .dash-card h3 {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .dash-card .amount {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-color);
+    }
+
+    .action-btn {
+      background-color: var(--accent-color);
+      color: #000;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.2s ease;
+      width: 100%;
+    }
+
+    .action-btn:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .action-btn.secondary {
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+    }
+
+    .action-btn.secondary:hover {
+      background-color: var(--border-color);
+    }
+
+    /* Section Headers */
+    .section-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid var(--accent-color);
+      padding-left: 0.75rem;
+    }
+
+    /* Tier Level Cards */
+    .tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .tier-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+
+    .tier-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .tier-card.active {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+    }
+
+    .tier-card .level-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .tier-card h4 {
+      font-size: 1.25rem;
+    }
+
+    .tier-card .yield {
+      font-size: 1.5rem;
+      color: var(--success-color);
+      font-weight: 700;
+      margin: 0.5rem 0;
+    }
+
+    .tier-details {
+      list-style: none;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .tier-details li {
+      margin-bottom: 0.4rem;
+    }
+
+    /* Task Module */
+    .task-container {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .task-progress {
+      width: 100%;
+      background-color: var(--border-color);
+      border-radius: 10px;
+      height: 12px;
+      margin: 1.5rem 0;
+      overflow: hidden;
+    }
+
+    .task-progress-bar {
+      width: 30%;
+      height: 100%;
+      background-color: var(--accent-color);
+    }
+
+    footer {
+      max-width: 1200px;
+      margin: 3rem auto 0 auto;
+      padding: 2rem 1rem 0 1rem;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="logo">
+      <span>⚡</span> YieldTask Hub
+    </div>
+    <div class="user-profile">
+      <span>User_9821</span>
+      <span class="badge" id="user-tier-badge">VIP 1</span>
+    </div>
+  </header>
+
+  <div class="container">
+    
+    <!-- User Financial Overview -->
+    <h2 class="section-title">Account Overview</h2>
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <h3>Total Staked Balance</h3>
+        <div class="amount" id="staked-balance">$50.00</div>
+        <button class="action-btn">Deposit Capital</button>
+      </div>
+
+      <div class="dash-card">
+        <h3>Daily Accumulated Earnings</h3>
+        <div class="amount" id="daily-earnings">$0.75</div>
+        <button class="action-btn secondary">Withdraw Earnings</button>
+      </div>
+
+      <div class="dash-card">
+        <h3>Tasks Completed Today</h3>
+        <div class="amount" id="task-counter">3 / 10</div>
+        <button class="action-btn secondary" onclick="scrollToTasks()">Go to Tasks</button>
+      </div>
+    </div>
+
+    <!-- Tier Levels Selection -->
+    <h2 class="section-title">Membership Tiers</h2>
+    <div class="tiers-grid">
+      
+      <!-- VIP 1 -->
+      <div class="tier-card active">
+        <div class="level-header">
+          <h4>VIP Level 1</h4>
+          <span class="badge">Current</span>
+        </div>
+        <div class="yield">1.5% Daily</div>
+        <ul class="tier-details">
+          <li><strong>Min Deposit:</strong> $10.00</li>
+          <li><strong>Max Deposit:</strong> $99.00</li>
+          <li><strong>Daily Tasks:</strong> 10 Confirmations</li>
+        </ul>
+        <button class="action-btn secondary" disabled>Active Level</button>
+      </div>
+
+      <!-- VIP 2 -->
+      <div class="tier-card">
+        <div class="level-header">
+          <h4>VIP Level 2</h4>
+        </div>
+        <div class="yield">2.5% Daily</div>
+        <ul class="tier-details">
+          <li><strong>Min Deposit:</strong> $100.00</li>
+          <li><strong>Max Deposit:</strong> $499.00</li>
+          <li><strong>Daily Tasks:</strong> 15 Confirmations</li>
+        </ul>
+        <button class="action-btn" onclick="upgradeTier('VIP 2', 100)">Unlock Level 2</button>
+      </div>
+
+      <!-- VIP 3 -->
+      <div class="tier-card">
+        <div class="level-header">
+          <h4>VIP Level 3</h4>
+        </div>
+        <div class="yield">3.5% Daily</div>
+        <ul class="tier-details">
+          <li><strong>Min Deposit:</strong> $500.00</li>
+          <li><strong>Max Deposit:</strong> $1,999.00</li>
+          <li><strong>Daily Tasks:</strong> 20 Confirmations</li>
+        </ul>
+        <button class="action-btn" onclick="upgradeTier('VIP 3', 500)">Unlock Level 3</button>
+      </div>
+
+      <!-- VIP 4 -->
+      <div class="tier-card">
+        <div class="level-header">
+          <h4>VIP Level 4</h4>
+        </div>
+        <div class="yield">5.0% Daily</div>
+        <ul class="tier-details">
+          <li><strong>Min Deposit:</strong> $2,000.00+</li>
+          <li><strong>Max Deposit:</strong> Unlimited</li>
+          <li><strong>Daily Tasks:</strong> 25 Confirmations</li>
+        </ul>
+        <button class="action-btn" onclick="upgradeTier('VIP 4', 2000)">Unlock Level 4</button>
+      </div>
+
+    </div>
+
+    <!-- Daily Task Completion Console -->
+    <h2 class="section-title" id="task-section">Daily Activity Portal</h2>
+    <div class="task-container">
+      <h3>Complete Tasks to Claim Returns</h3>
+      <p style="color: var(--text-muted); margin-top: 0.5rem;">Click the action button below to validate daily automated queue orders and unlock yield payouts.</p>
+      
+      <div class="task-progress">
+        <div class="task-progress-bar" id="progress-bar"></div>
+      </div>
+
+      <button class="action-btn" style="max-width: 300px; margin: 0 auto;" onclick="completeTask()">Process Next Task Order</button>
+    </div>
+
+  </div>
+
+  <!-- Disclaimer Footer -->
+  <footer>
+    <p><strong>Platform Notice & Risk Warning:</strong> Yield rates are subject to user capital tier requirements and completion of mandatory daily validation tasks. Operating high-yield financial portals without proper regulatory registration carries compliance risks. Standard network transaction fees apply to all deposits and withdrawals.</p>
+  </footer>
+
+  <!-- Basic Interactivity Demo Script -->
+  <script>
+    let currentTasks = 3;
+    const maxTasks = 10;
+    let currentEarnings = 0.75;
+
+    function completeTask() {
+      if (currentTasks < maxTasks) {
+        currentTasks++;
+        currentEarnings += 0.25;
+        
+        // Update UI
+        document.getElementById('task-counter').innerText = `${currentTasks} / ${maxTasks}`;
+        document.getElementById('daily-earnings').innerText = `$${currentEarnings.toFixed(2)}`;
+        
+        const percentage = (currentTasks / maxTasks) * 100;
+        document.getElementById('progress-bar').style.width = `${percentage}%`;
+        
+        alert(`Task completed successfully! $0.25 added to earnings.`);
+      } else {
+        alert('Daily task limit reached for current tier level.');
+      }
+    }
+
+    function upgradeTier(tierName, minDeposit) {
+      alert(`To upgrade to ${tierName}, please deposit a minimum balance of $${minDeposit}.00.`);
+    }
+
+    function scrollToTasks() {
+      document.getElementById('task-section').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
